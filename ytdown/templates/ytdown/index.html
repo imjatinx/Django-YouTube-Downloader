@@ -84,12 +84,15 @@
                 fetch(`/download?videoUrl=${videoUrl}`)
                     .then(response => {
                         if (response.ok) {
+                            const contentDisposition = response.headers.get('content-disposition');
+                            const match = /filename="(.+?)"/.exec(contentDisposition);
+                            const filename = match ? match[1] : 'video.mp4';
                             // Trigger the download by creating a link element and clicking it
                             response.blob().then(blob => {
                                 const url = window.URL.createObjectURL(blob);
                                 const a = document.createElement('a');
                                 a.href = url;
-                                a.download = 'video.mp4'; // Set the desired file name
+                                a.download = filename; // Set the desired file name
                                 a.style.display = 'none';
                                 document.body.appendChild(a);
                                 a.click();
