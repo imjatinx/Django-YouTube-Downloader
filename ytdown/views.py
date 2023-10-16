@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from pytube import YouTube
 import datetime
 import requests
@@ -71,7 +71,21 @@ def download_video(request):
                 yt = pytube.YouTube(video_url)
                 video = yt.streams.get_highest_resolution()
                 download_link = video.url
-                return JsonResponse({'downloadLink': download_link})
+
+                response = requests.get(download_link, stream=True)
+
+                # Set the Content-Disposition header to force download
+                response_headers = {
+                    'Content-Disposition': f'attachment; filename="{yt.title}.mp4"', }
+
+                # return JsonResponse({'downloadLink': download_link})
+                return StreamingHttpResponse(
+                    response.iter_content(chunk_size=4096),
+                    content_type='video/mp4',
+                    status=response.status_code,
+                    reason=response.reason,
+                    headers=response_headers
+                )
             except Exception as e:
                 return JsonResponse({'error': str(e)})
     
