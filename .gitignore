@@ -1,3 +1,6 @@
 passenger_wsgi.py
 stderr.log
 tmp/
+__pycache__/
+public/
+.htaccess
