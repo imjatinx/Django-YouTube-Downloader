@@ -6,13 +6,300 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 
     <script src="https://kit.fontawesome.com/9a8781307b.js" crossorigin="anonymous"></script>
 
-    <title>YouTube Dowloader</title>
-    
-    <link rel="stylesheet" href="/static/style.css" />
+    <title>YouTube Downloader</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        body {
+            font-family: Poppins, sans-serif;
+        }
+
+        /* navbar styling */
+        nav {
+            position: fixed;
+            background-color: #fff;
+            padding: 0 20px 0 20px;
+            border-bottom: 1px solid #e9e9e9;
+            height: 75px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        label.logo {
+            font-size: 20px;
+            line-height: 75px;
+            padding: 0 5px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            padding-left: 0;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            top: 75px;
+            left: -100%;
+            transition: all 0.5s;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        nav ul li {
+            display: block;
+            line-height: 75px;
+            padding: 10px 20px;
+            width: 100%;
+            line-height: 30px;
+        }
+
+        nav ul li a {
+            color: #555;
+            font-size: 18px;
+        }
+
+        nav ul li.active,
+        nav ul li:hover {
+            background-color: #f5f3f3;
+        }
+
+        .hamburger {
+            font-size: 30px;
+            color: black;
+            float: right;
+            line-height: 75px;
+            cursor: pointer;
+            display: block;
+        }
+
+        .xmark {
+            font-size: 30px;
+            color: black;
+            float: right;
+            line-height: 75px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #check {
+            display: none;
+        }
+
+        #check:checked~ul {
+            left: 0;
+        }
+
+        #check:checked~.hamburger {
+            display: none;
+        }
+
+        #check:checked~.xmark {
+            display: block;
+        }
+
+        /* main container */
+        .main {
+            padding-top: 15px;
+            z-index: 1;
+        }
+
+        /* buttons */
+        .buttons {
+            background-color: #f5f3f3;
+            border-radius: 50px;
+            width: fit-content;
+            padding: 8px 15px;
+        }
+
+        .button {
+            background-color: initial;
+            color: #898989;
+            border: 0;
+            border-radius: 21px;
+            margin: 0 5px;
+            padding: 10px 15px;
+        }
+
+        .button-color {
+            background-color: #0006ff;
+            color: white;
+        }
+
+        .button:hover {
+            background-color: #0006ff;
+        }
+
+        /* search bar styling */
+        .text {
+            border: 6px solid #e9e9e9;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .search-container {
+            width: 80%;
+            height: fit-content;
+            border: 6px solid #e9e9e9;
+            margin: 40px 0 40px 0;
+            border-radius: 10px;
+        }
+
+        form {
+            background: #ffff;
+            height: 55px;
+            display: flex;
+        }
+
+        form input {
+            flex: 1;
+            border: none;
+            outline: none;
+        }
+
+        form button {
+            background: #0006ff;
+            border: none;
+            outline: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .downloadbtn {
+            font-size: 14px;
+            padding: 5px 15px;
+            font-weight: 600;
+        }
+
+        /* sections */
+        .sections {
+            margin: 20px 100px 0 100px;
+            font-size: 17px;
+            padding: 20px;
+        }
+
+        .sections h1 {
+            font-size: 25px;
+            font-weight: 600;
+            margin: 20px 0 20px 0;
+            text-align: center;
+        }
+
+        /* faq styling */
+        .faqitem {
+            margin-bottom: 15px;
+        }
+
+        .ques {
+            font-family: Poppins, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .ans {
+            margin-top: 15px;
+            font-family: Poppins, sans-serif;
+        }
+
+        .footer {
+            padding: 25px;
+            border-top: 1px solid #e9e9e9;
+            margin: 50px 20px 0;
+            padding: 20px;
+        }
+
+        @media screen and (max-width: 560px) {
+            .sections {
+                margin: 20px 20px 0 20px;
+                font-size: 14px;
+                padding: 15px;
+            }
+
+            label.logo {
+                font-size: 15px;
+            }
+
+            .search-container {
+                margin: 5px 0 5px 0;
+                width: 90%;
+                border: 3px solid #e9e9e9;
+            }
+
+            .text {
+                border: 3px solid #e9e9e9;
+                border-radius: 8px;
+                width: 100%;
+            }
+
+            .custom-input {
+                width: 80px;
+            }
+
+            .buttons {
+                background-color: #f5f3f3;
+                border-radius: 50px;
+                width: fit-content;
+                padding: 4px 8px;
+            }
+
+            .button {
+                background-color: initial;
+                color: #898989;
+                border: 0;
+                border-radius: 21px;
+                margin: 0 2px;
+                padding: 5px 10px;
+            }
+        }
+
+        @media screen and (max-width: 250px) {
+            label.logo {
+                font-size: 8px;
+                padding: 0px;
+            }
+
+            .text {
+                border: 1px solid #e9e9e9;
+                border-radius: 8px;
+                width: 100%;
+                font-size: 4px;
+            }
+
+            .custom-input {
+                width: 40px;
+            }
+
+            .search-container {
+                margin: 0;
+                width: 100%;
+                border: 1px solid #e9e9e9;
+            }
+
+            .sections {
+                margin: 20px 5px 0 5px;
+                font-size: 8px;
+                padding: 8px;
+            }
+
+            .downloadbtn {
+                font-size: 6px;
+                padding: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -52,7 +339,8 @@
         <div class="d-flex justify-content-center align-items-center">
             <div class="search-container">
                 <form id="downloadForm" autocomplete="off">
-                    <input type="text" class="form-control" id="videoUrl" placeholder="Paste video link here..." required>
+                    <input type="text" class="form-control" id="videoUrl" placeholder="Paste video link here..."
+                        required>
                     <button class="downloadbtn" type="submit" id="downloadButton">
                         <a style="color: white">Download</a>
                     </button>
@@ -60,30 +348,30 @@
             </div>
         </div>
         <div id="loader" style="display: none;">
-            <div class="d-flex justify-content-center">
-                <div class="spinner-grow text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="spinner-grow text-secondary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="spinner-grow text-success" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="spinner-grow text-danger" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="spinner-grow text-warning" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="spinner-grow text-info" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="spinner-grow text-light" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <div class="spinner-grow text-dark" role="status">
-                    <span class="visually-hidden">Loading...</span>
+            <div class="d-flex align-items-center flex-column">
+                <div class="text-success fw-bold">Wait, Downloading in background...</div>
+                <div>
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-danger" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-info" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-dark" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -223,7 +511,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
-        
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
@@ -246,7 +534,7 @@
                     downloadButton.innerHTML = 'Downloading';
                     downloadButton.disabled = true;
                     downloadYouTubeVideo(videoUrl);
-                }else{
+                } else {
                     alert("Please enter a video URL")
                 }
             });
